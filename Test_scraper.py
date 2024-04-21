@@ -1,4 +1,6 @@
+import json
 import requests
+import pandas as pd
 
 url = "https://api.afl.com.au/statspro/playersStats/seasons/CD_S2024014?includeBenchmarks=false"
 
@@ -20,6 +22,10 @@ headers = {
   'Cookie': 'ak_bmsc=77B3597F16CCA474AF5CBCEFB5BC6BB1~000000000000000000000000000000~YAAQBRb0GPerbdSOAQAALdxa/heVPsBDhcPqdQBFFHPdzj0im4gGgrgwN4ZCPo+AP5syZEzErU1oORQyW9couu6F7ccHZLnkgYavJZP6UkxXGK8xI3U0d05bS4YJkv+0rt3bL06SsJ6POL1cIcrw2tvuMyK3da+yoC3a87sH73hZ+boWVDwfvuQ2F13qbZ/fplgZWXPp4CKAClJW7a7efRIYY2dLmDnXhLSmoyR9ZmlkYc5PFO9XtNtFcOwKVqWR03X4gSWaXFCGcdGfqVubbzW3+mmmzEgZ9XE+MQmSuHkvdiNv9jy3ZjZl00fRmgtU3ltUI7IUwYQnyoJDPGUGc45BkOQN8zSM4U9EW42gtBN+SjV//tIDjzqivA=='
 }
 
-response = requests.request("GET", url, headers=headers, data=payload)
+r = requests.get(url, headers=headers)
 
-print(response.text)
+playerdata = r.json()
+
+df = pd.json_normalize(playerdata['players'])
+
+df.to_csv('playerdata.csv', index=False)
